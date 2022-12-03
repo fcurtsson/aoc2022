@@ -11,7 +11,7 @@ const testData = fs
     .toString()
     .split('\n')
 
-const runData = data
+const runData = testData
 
 function part1() {
     
