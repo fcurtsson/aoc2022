@@ -72,13 +72,19 @@ function getDirSize(dirKey, directory) {
     return directFileTotal + childFileTotals
 }
 
-function findDirsSizesBelowLimit(directory, limit) {
+function findDirsSizesBelowLimit(directory, limit, isMinLimit) {
 
     const sizesOverLimit = []
     Object.keys(directory).forEach(key => {
         const size = getDirSize(key, directory)
-        if (size <= limit) {
-            sizesOverLimit.push(size)
+        if (isMinLimit) {
+            if (size >= limit) {
+                sizesOverLimit.push(size)
+            }
+        } else {
+            if (size <= limit) {
+                sizesOverLimit.push(size)
+            }
         }
     })
     return sizesOverLimit
@@ -95,7 +101,16 @@ function part1() {
 
 function part2() {
 
-    console.log("Part 2: ")
+    const dir = createDirectory(runData)
+    const spaceNeeded = 30000000
+    const currentSize = getDirSize('/', dir)
+    const spaceToFreeUp = currentSize - (70000000 - spaceNeeded)
+
+    const sizesBelowLimit = findDirsSizesBelowLimit(dir, spaceToFreeUp, true)
+    sizesBelowLimit.sort((a, b) => a - b)
+    const smallestDeletableDirSize = sizesBelowLimit[0]
+
+    console.log("Part 2: Smaller deletable dir size: ", smallestDeletableDirSize)
 }
 
 part1()
